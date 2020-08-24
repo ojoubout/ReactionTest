@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="icons">
+        <item>@drawable/ic_reaction</item>
+        <item>@drawable/ic_reaction</item>
+        <item>@drawable/ic_reaction</item>
+        <item>@drawable/ic_reaction</item>
+        <item>@drawable/ic_reaction</item>
+        <item>@drawable/ic_reaction</item>
+        <item>@drawable/ic_reaction</item>
+        <item>@drawable/ic_reaction</item>
+        <item>@drawable/ic_reaction</item>
+        <item>@drawable/ic_reaction</item>
+    </array>
+    <string-array name="quiz_names">
+        <item>Reaction Time</item>
+        <item>Aim Speed</item>
+        <item>Typing Speed</item>
+        <item>Click Speed</item>
+        <item>Fifth Quiz</item>
+        <item>Sixth Quiz</item>
+        <item>Seventh Quiz</item>
+        <item>Eight Quiz</item>
+        <item>Ninth Quiz</item>
+        <item>Tenth Quiz</item>
+    </string-array>
+    <string-array name="quiz_description">
+        <item>This quiz is about testing your reaction time. the screen is gonna be blue when it become yellow you should click as fast as possible</item>
+        <item>42 target will appear and you should click them as quickly as you can</item>
+        <item>Third Quiz</item>
+        <item>Memory</item>
+        <item>Fifth Quiz</item>
+        <item>Sixth Quiz</item>
+        <item>Seventh Quiz</item>
+        <item>Eight Quiz</item>
+        <item>Ninth Quiz</item>
+        <item>Tenth Quiz</item>
+    </string-array>
+</resources>

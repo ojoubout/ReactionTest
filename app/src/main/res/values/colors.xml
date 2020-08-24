@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#f05a25</color>
+    <color name="colorPrimaryDark">#B63000</color>
+    <color name="colorAccent">#b0b0b0</color>\
+
+    <color name="IDLE">@color/colorPrimary</color>
+    <color name="WAITING">#0090FF</color>
+    <color name="CLICK">#FFDD00</color>
+</resources>
