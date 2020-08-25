@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     String[] quizNames;
     String[] quizDescriptions;
     TypedArray quizIcons;
+    Class[] quizClasses = {ReactionQuiz.class, AimQuiz.class};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,23 +35,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         gridView = findViewById(R.id.quizGridView);
-        quizList.add(new QuizItem("First Quiz", R.drawable.ic_reaction, "This quiz is about testing your reaction time. the screen is gonna be blue when it become yellow you should click as fast as possible"));
-        quizList.add(new QuizItem("Second Quiz", R.drawable.ic_reaction, ""));
-        quizList.add(new QuizItem("Third Quiz", R.drawable.ic_reaction, ""));
-        quizList.add(new QuizItem("Fourth Quiz", R.drawable.ic_reaction, ""));
-        quizList.add(new QuizItem("Fifth Quiz", R.drawable.ic_reaction, ""));
-        quizList.add(new QuizItem("Sixth Quiz", R.drawable.ic_reaction, ""));
-        quizList.add(new QuizItem("Seventh Quiz", R.drawable.ic_reaction, ""));
-        quizList.add(new QuizItem("Eight Quiz", R.drawable.ic_reaction, ""));
-        quizList.add(new QuizItem("Nine Quiz", R.drawable.ic_reaction, ""));
-        quizList.add(new QuizItem("tenth Quiz", R.drawable.ic_reaction, ""));
-
-        QuizListAdapter  adapter = new QuizListAdapter(this, quizList);
-        gridView.setAdapter(adapter);
-
+//        quizList.add(new QuizItem("First Quiz", R.drawable.ic_reaction, "This quiz is about testing your reaction time. the screen is gonna be blue when it become yellow you should click as fast as possible"));
+//        quizList.add(new QuizItem("Second Quiz", R.drawable.ic_reaction, ""));
+//        quizList.add(new QuizItem("Third Quiz", R.drawable.ic_reaction, ""));
+//        quizList.add(new QuizItem("Fourth Quiz", R.drawable.ic_reaction, ""));
+//        quizList.add(new QuizItem("Fifth Quiz", R.drawable.ic_reaction, ""));
+//        quizList.add(new QuizItem("Sixth Quiz", R.drawable.ic_reaction, ""));
+//        quizList.add(new QuizItem("Seventh Quiz", R.drawable.ic_reaction, ""));
+//        quizList.add(new QuizItem("Eight Quiz", R.drawable.ic_reaction, ""));
+//        quizList.add(new QuizItem("Nine Quiz", R.drawable.ic_reaction, ""));
+//        quizList.add(new QuizItem("tenth Quiz", R.drawable.ic_reaction, ""));
         quizIcons = getResources().obtainTypedArray(R.array.icons);
         quizNames = getResources().getStringArray(R.array.quiz_names);
         quizDescriptions = getResources().getStringArray(R.array.quiz_description);
+//        quizClasses = {};
+        for (int i = 0; i < quizNames.length; i++) {
+            quizList.add(new QuizItem(quizNames[i], quizIcons.getResourceId(i, R.drawable.ic_reaction), quizDescriptions[i]));
+        }
+
+
+            QuizListAdapter  adapter = new QuizListAdapter(this, quizList);
+        gridView.setAdapter(adapter);
+
 
 
         gridView.setOnItemClickListener((adapterView, view, i, l) -> {
@@ -76,11 +83,9 @@ public class MainActivity extends AppCompatActivity {
             dialog.dismiss();
         });
         playButton.setOnClickListener(view -> {
-            if (quizId == 0) {
-                Intent intent = new Intent(MainActivity.this, ReactionQuiz.class);
-                startActivity(intent);
-                dialog.dismiss();
-            }
+            Intent intent = new Intent(MainActivity.this, quizClasses[quizId]);
+            startActivity(intent);
+            dialog.dismiss();
         });
         dialog.show();
     }

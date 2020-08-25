@@ -2,7 +2,7 @@
 <resources>
     <array name="icons">
         <item>@drawable/ic_reaction</item>
-        <item>@drawable/ic_reaction</item>
+        <item>@drawable/ic_target</item>
         <item>@drawable/ic_reaction</item>
         <item>@drawable/ic_reaction</item>
         <item>@drawable/ic_reaction</item>
