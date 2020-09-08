@@ -3,6 +3,7 @@ package com.joubouti.reactiontest;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -38,6 +39,10 @@ public class TypingQuiz extends AppCompatActivity {
     private int lastSize = 0;
     private static final String TAG = "TypingQuiz";
 
+    private int bestScore;
+    SharedPreferences sharedPref;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +57,10 @@ public class TypingQuiz extends AppCompatActivity {
         editText = findViewById(R.id.editText);
         sequences = getResources().getStringArray(R.array.typing_sentences);
 
+        sharedPref = getPreferences(MODE_PRIVATE);
+        bestScore = General.getBestScore(sharedPref);
+        refreshBestScore();
+
         background.setOnClickListener(view -> {
             setKeyboardVisible(true);
             if (!isPlaying) {
@@ -62,11 +71,12 @@ public class TypingQuiz extends AppCompatActivity {
                 editText.setText("");
                 tick = SystemClock.elapsedRealtime();
                 Random r = new Random();
-                sequenceID = 0; // r.nextInt(SEQUENCES_COUNT)
+                sequenceID = r.nextInt(SEQUENCES_COUNT); // r.nextInt(SEQUENCES_COUNT)
                 sequence = new SpannableString(sequences[sequenceID]);
                 sequenceText.setText(sequence);
             }
         });
+        backButton.setOnClickListener(view -> finish());
 //        BackgroundColorSpan bgcRed = new BackgroundColorSpan(Color.RED);
 //        BackgroundColorSpan bgcGreen = new BackgroundColorSpan(Color.GREEN);
         BackgroundColorSpan bgcNone = new BackgroundColorSpan(Color.TRANSPARENT);
@@ -78,8 +88,23 @@ public class TypingQuiz extends AppCompatActivity {
                 wpmText.setText(s);
                 sequence = new SpannableString(sequences[sequenceID]);
                 if (s.toString().equals(sequenceText.getText().toString())) {
-                    Log.e(TAG, "YOU WIN");
-                    wpmText.setText("You WIN");
+                    isPlaying = false;
+                    sequenceText.setVisibility(View.INVISIBLE);
+                    infoText.setVisibility(View.VISIBLE);
+                    wpmText.setVisibility(View.INVISIBLE);
+
+                    float a = countWordsUsingSplit(sequences[sequenceID]) * 60, b = (SystemClock.elapsedRealtime() - tick) / 1000f;
+                    int score = (int) (a / b);
+                    Log.e(TAG, "YOU WIN: " + a + "|" + b + "|" + (SystemClock.elapsedRealtime() - tick));
+
+                    infoText.setText(score  + " wpm");
+//                                editText.setText("");
+
+                    bestScore = General.saveBestScore(sharedPref, score, General.HIGH);
+                    refreshBestScore();
+
+                    setKeyboardVisible(false);
+
                     return;
                 }
                 for (int i = 0; i < sequenceText.length() && (i < s.length() || i < lastSize); i++) {
@@ -115,6 +140,14 @@ public class TypingQuiz extends AppCompatActivity {
 
         String[] words = input.split("\\s+");
         return words.length;
+    }
+
+    private void refreshBestScore() {
+        if (bestScore == -1) {
+            bestScoreText.setText("Your best: N/A");
+        } else {
+            bestScoreText.setText("Your best: "+ Integer.toString(bestScore) + " ms");
+        }
     }
 
 
