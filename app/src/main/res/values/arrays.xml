@@ -3,7 +3,7 @@
     <array name="icons">
         <item>@drawable/ic_reaction</item>
         <item>@drawable/ic_target</item>
-        <item>@drawable/ic_reaction</item>
+        <item>@drawable/ic_typing</item>
         <item>@drawable/ic_reaction</item>
         <item>@drawable/ic_reaction</item>
         <item>@drawable/ic_reaction</item>
@@ -25,9 +25,9 @@
         <item>Tenth Quiz</item>
     </string-array>
     <string-array name="quiz_description">
-        <item>This quiz is about testing your reaction time. the screen is gonna be blue when it become yellow you should click as fast as possible</item>
+        <item>the screen is gonna be blue when it become yellow you should click as fast as possible</item>
         <item>42 target will appear and you should click them as quickly as you can</item>
-        <item>Third Quiz</item>
+        <item>calculating how many words you can type per minute</item>
         <item>Memory</item>
         <item>Fifth Quiz</item>
         <item>Sixth Quiz</item>
@@ -35,5 +35,26 @@
         <item>Eight Quiz</item>
         <item>Ninth Quiz</item>
         <item>Tenth Quiz</item>
+    </string-array>
+    
+    <string-array name="typing_sentences">
+        <item>Hello World</item>
+        <item>Mary realized if her calculator had a history, it would be more embarrassing than her computer browser history.</item>
+        <item>Even though he thought the world was flat he did not see the irony of wanting to travel around the world.</item>
+        <item>When I cook spaghetti, I like to boil it a few minutes past al dente so the noodles are super slippery.</item>
+        <item>He was so preoccupied with whether or not he could that he failed to stop to consider if he should.</item>
+        <item>She felt that chill that makes the hairs on the back of your neck when he walked into the room.</item>
+        <item>The tattered work gloves speak of the many hours of hard labor he endured throughout his life.</item>
+        <item>The clock within this blog and the clock on my laptop are 1 hour different from each other.</item>
+        <item>It dawned on her that others could make her happier, but only she could make herself happy.</item>
+        <item>The complicated school homework left the parents trying to help their kids quite confused.</item>
+        <item>His ultimate dream fantasy consisted of being content and sleeping eight hours in a row.</item>
+        <item>It was a slippery slope and he was willing to slide all the way to the deepest depths.</item>
+        <item>When nobody is around, the trees gossip about the people who have walked under them.</item>
+        <item>Had he known what was going to happen, he would have never stepped into the shower.</item>
+        <item>No matter how beautiful the sunset, it saddened her knowing she was one day older.</item>
+        <item>The efficiency we have at removing trash has made creating trash more acceptable.</item>
+        <item>Green should have smelled more tranquil, but somehow it just tasted rotten.</item>
+        <item>His mind was blown that there was nothing in space except space itself.</item>
     </string-array>
 </resources>

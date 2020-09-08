@@ -41,8 +41,8 @@ public class AimQuiz extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
         background = findViewById(R.id.background);
 
-        sharedPref = getPreferences(Context.MODE_PRIVATE);
-        bestScore = sharedPref.getInt("BestScore", -1);
+        sharedPref = getPreferences(MODE_PRIVATE);
+        bestScore = General.getBestScore(sharedPref);
         refreshBestScore();
         background.setOnClickListener(view -> {
             if (!isPlaying) {
@@ -56,12 +56,8 @@ public class AimQuiz extends AppCompatActivity {
                     int diff = (int) (SystemClock.elapsedRealtime() - tick) / TARGETS;
                     infoText.setText("AVG Time per target:\n " + diff + " ms\n" +
                             "Tap to Start");
-                    if (bestScore == -1 || diff < bestScore) {
-                        bestScore = diff;
-                        refreshBestScore();
-                        sharedPref.edit().putInt("BestScore", diff).apply();
-                    }
-
+                    bestScore = General.saveBestScore(sharedPref, diff, General.LOW);
+                    refreshBestScore();
                 } else {
                     targetChangePosition();
                 }

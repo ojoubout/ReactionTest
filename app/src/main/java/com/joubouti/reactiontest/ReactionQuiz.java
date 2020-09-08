@@ -43,8 +43,9 @@ public class ReactionQuiz extends AppCompatActivity {
 
         sharedPref = getPreferences(Context.MODE_PRIVATE);
 
-        bestScore = sharedPref.getInt("BestScore", -1);
-        bestScoreText.setText("Your best: "+ (bestScore >= 0 ? Integer.toString(bestScore) + " ms" : "N/A"));
+        bestScore = General.getBestScore(sharedPref);
+        refreshBestScore();
+
 
         backButton.setOnClickListener(view -> finish());
         clickScreen.setOnClickListener(view -> {
@@ -78,12 +79,18 @@ public class ReactionQuiz extends AppCompatActivity {
                 state = IDLE;
                 int diff = (int) (SystemClock.elapsedRealtime() - tick);
                 infoText.setText("Your best: " + diff + " ms");
-                if (bestScore == -1 || diff < bestScore) {
-                    bestScore = diff;
-                    bestScoreText.setText("Your best: " + diff + " ms");
-                    sharedPref.edit().putInt("BestScore", diff).apply();
-                }
+                bestScore = General.saveBestScore(sharedPref, diff, General.LOW);
+                refreshBestScore();
             }
         });
     }
+
+    private void refreshBestScore() {
+        if (bestScore == -1) {
+            bestScoreText.setText("Your best: N/A");
+        } else {
+            bestScoreText.setText("Your best: "+ Integer.toString(bestScore) + " ms");
+        }
+    }
+
 }
