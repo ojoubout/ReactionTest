@@ -35,6 +35,9 @@ public class TypingQuiz extends AppCompatActivity {
     private int sequenceID;
     private long tick;
 
+    private int lastSize = 0;
+    private static final String TAG = "TypingQuiz";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,42 +67,32 @@ public class TypingQuiz extends AppCompatActivity {
                 sequenceText.setText(sequence);
             }
         });
+//        BackgroundColorSpan bgcRed = new BackgroundColorSpan(Color.RED);
+//        BackgroundColorSpan bgcGreen = new BackgroundColorSpan(Color.GREEN);
+        BackgroundColorSpan bgcNone = new BackgroundColorSpan(Color.TRANSPARENT);
+
+
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                BackgroundColorSpan bgcRed = new BackgroundColorSpan(Color.RED);
-                BackgroundColorSpan bgcGreen = new BackgroundColorSpan(Color.GREEN);
-                BackgroundColorSpan bgcNone = new BackgroundColorSpan(Color.TRANSPARENT);
-                Log.e("INFOT", start + ":" + count + ":" + before);
-                wpmText.setText(editText.getText());
-                for (int i = start; i < start + Math.max(count, before) && i < sequences[sequenceID].length(); i++) {
-                    if (before > count) {
-                        if (i >= start + count) {
-                            Log.e("INFOT", "T" + i);
-                            sequence.setSpan(new BackgroundColorSpan(Color.TRANSPARENT), i, i + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
+                wpmText.setText(s);
+                sequence = new SpannableString(sequences[sequenceID]);
+                if (s.toString().equals(sequenceText.getText().toString())) {
+                    Log.e(TAG, "YOU WIN");
+                    wpmText.setText("You WIN");
+                    return;
+                }
+                for (int i = 0; i < sequenceText.length() && (i < s.length() || i < lastSize); i++) {
+                    Log.e(TAG, "" + i);
+                    if (i >= s.length()) {
+                        sequence.setSpan(bgcNone, i, i + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                    } else if (sequence.charAt(i) == s.charAt(i)) {
+                        sequence.setSpan(new BackgroundColorSpan(Color.GREEN), i, i + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                     } else {
-//                    Log.e("INFOT", s.charAt(i) + ":" + sequences[sequenceID].charAt(i));
-                        if (s.charAt(i) == sequences[sequenceID].charAt(i)) {
-                            Log.e("INFOT", "V" + i);
-                            sequence.setSpan(bgcGreen, i, i + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                            if (s.toString().equals(sequences[sequenceID])) {
-                                Log.e("INFOT", "S" + countWordsUsingSplit(sequences[sequenceID])  / (SystemClock.elapsedRealtime() / 60));
-                                isPlaying = false;
-                                sequenceText.setVisibility(View.INVISIBLE);
-                                infoText.setVisibility(View.VISIBLE);
-//                                wpmText.setVisibility(View.VISIBLE);
-
-                                wpmText.setText(countWordsUsingSplit(sequences[sequenceID]) * 60 / ((SystemClock.elapsedRealtime() - tick) / 1000)  + " wpm");
-//                                editText.setText("");
-                                setKeyboardVisible(false);
-                            }
-                        } else {
-//                        Log.e("INFOT", "C" + i);
-                            sequence.setSpan(bgcRed, i, i + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
+                        sequence.setSpan(new BackgroundColorSpan(Color.RED), i, i + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                     }
                 }
+                lastSize = s.length();
                 sequenceText.setText(sequence);
             }
 
