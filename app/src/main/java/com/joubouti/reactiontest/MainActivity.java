@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     String[] quizNames;
     String[] quizDescriptions;
     TypedArray quizIcons;
-    Class[] quizClasses = {ReactionQuiz.class, AimQuiz.class, TypingQuiz.class};
+    Class[] quizClasses = {ReactionQuiz.class, AimQuiz.class, TypingQuiz.class, ClickQuiz.class, MemoryQuiz.class};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

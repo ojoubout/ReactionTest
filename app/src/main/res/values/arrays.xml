@@ -4,7 +4,7 @@
         <item>@drawable/ic_reaction</item>
         <item>@drawable/ic_target</item>
         <item>@drawable/ic_typing</item>
-        <item>@drawable/ic_reaction</item>
+        <item>@drawable/ic_click</item>
         <item>@drawable/ic_reaction</item>
         <item>@drawable/ic_reaction</item>
         <item>@drawable/ic_reaction</item>
@@ -17,7 +17,7 @@
         <item>Aim Speed</item>
         <item>Typing Speed</item>
         <item>Click Speed</item>
-        <item>Fifth Quiz</item>
+        <item>Memory</item>
         <item>Sixth Quiz</item>
         <item>Seventh Quiz</item>
         <item>Eight Quiz</item>
@@ -28,8 +28,8 @@
         <item>the screen is gonna be blue when it become yellow you should click as fast as possible</item>
         <item>42 target will appear and you should click them as quickly as you can</item>
         <item>calculating how many words you can type per minute</item>
-        <item>Memory</item>
-        <item>Fifth Quiz</item>
+        <item>calculating how many clicks you can do in 10 seconds</item>
+        <item>remember the white squares position</item>
         <item>Sixth Quiz</item>
         <item>Seventh Quiz</item>
         <item>Eight Quiz</item>

@@ -1,6 +1,8 @@
 package com.joubouti.reactiontest;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -20,5 +22,11 @@ public class General {
 
     public static int getBestScore(SharedPreferences sharedPref) {
         return sharedPref.getInt("BestScore", -1);
+    }
+
+    public static void restart(Activity activity) {
+        Intent intent = activity.getIntent();
+        activity.finish();
+        activity.startActivity(intent);
     }
 }

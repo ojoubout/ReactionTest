@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TypingQuiz"></activity>
+        <activity android:name=".MemoryQuiz"></activity>
+        <activity android:name=".ClickQuiz" />
+        <activity android:name=".TypingQuiz" />
         <activity android:name=".AimQuiz" />
         <activity android:name=".ReactionQuiz" />
         <activity android:name=".MainActivity">
