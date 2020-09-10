@@ -2,6 +2,7 @@ package com.joubouti.reactiontest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -28,19 +29,20 @@ public class TypingQuiz extends AppCompatActivity {
     private ImageView background;
     private EditText editText;
     private TextView bestScoreText, infoText, sequenceText, wpmText;
-    private Button backButton;
+    private Button backButton, resetButton;
     private boolean isPlaying = false;
     private SpannableString sequence;
     private String[] sequences;
     private final int SEQUENCES_COUNT = 16;
     private int sequenceID;
+
+    private boolean startTick;
     private long tick;
 
     private int lastSize = 0;
     private static final String TAG = "TypingQuiz";
 
     private int bestScore;
-    SharedPreferences sharedPref;
 
 
     @Override
@@ -52,13 +54,13 @@ public class TypingQuiz extends AppCompatActivity {
         wpmText = findViewById(R.id.wpmText);
         infoText = findViewById(R.id.infoText);
         sequenceText = findViewById(R.id.sequenceText);
+        resetButton = findViewById(R.id.resetButton);
         backButton = findViewById(R.id.backButton);
         background = findViewById(R.id.background);
         editText = findViewById(R.id.editText);
         sequences = getResources().getStringArray(R.array.typing_sentences);
 
-        sharedPref = getPreferences(MODE_PRIVATE);
-        bestScore = General.getBestScore(sharedPref);
+        bestScore = General.getBestScore(this);
         refreshBestScore();
 
         background.setOnClickListener(view -> {
@@ -69,13 +71,15 @@ public class TypingQuiz extends AppCompatActivity {
                 infoText.setVisibility(View.INVISIBLE);
                 wpmText.setVisibility(View.VISIBLE);
                 editText.setText("");
-                tick = SystemClock.elapsedRealtime();
+                startTick = false;
                 Random r = new Random();
                 sequenceID = r.nextInt(SEQUENCES_COUNT); // r.nextInt(SEQUENCES_COUNT)
                 sequence = new SpannableString(sequences[sequenceID]);
                 sequenceText.setText(sequence);
             }
         });
+
+        resetButton.setOnClickListener(view -> General.restart(this));
         backButton.setOnClickListener(view -> finish());
 //        BackgroundColorSpan bgcRed = new BackgroundColorSpan(Color.RED);
 //        BackgroundColorSpan bgcGreen = new BackgroundColorSpan(Color.GREEN);
@@ -85,7 +89,14 @@ public class TypingQuiz extends AppCompatActivity {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                wpmText.setText(s);
+                float a = (s.length() / 5f) * 60, b = (SystemClock.elapsedRealtime() - tick) / 1000f;
+                int score = (int) (a / b);
+
+                if (!startTick) {
+                    startTick = true;
+                    tick = SystemClock.elapsedRealtime();
+                }
+                wpmText.setText(score  + " wpm");
                 sequence = new SpannableString(sequences[sequenceID]);
                 if (s.toString().equals(sequenceText.getText().toString())) {
                     isPlaying = false;
@@ -93,14 +104,12 @@ public class TypingQuiz extends AppCompatActivity {
                     infoText.setVisibility(View.VISIBLE);
                     wpmText.setVisibility(View.INVISIBLE);
 
-                    float a = countWordsUsingSplit(sequences[sequenceID]) * 60, b = (SystemClock.elapsedRealtime() - tick) / 1000f;
-                    int score = (int) (a / b);
                     Log.e(TAG, "YOU WIN: " + a + "|" + b + "|" + (SystemClock.elapsedRealtime() - tick));
 
                     infoText.setText(score  + " wpm");
 //                                editText.setText("");
 
-                    bestScore = General.saveBestScore(sharedPref, score, General.HIGH);
+                    bestScore = General.saveBestScore(TypingQuiz.this, score, General.HIGH);
                     refreshBestScore();
 
                     setKeyboardVisible(false);
@@ -146,7 +155,7 @@ public class TypingQuiz extends AppCompatActivity {
         if (bestScore == -1) {
             bestScoreText.setText("Your best: N/A");
         } else {
-            bestScoreText.setText("Your best: "+ Integer.toString(bestScore) + " ms");
+            bestScoreText.setText("Your best: "+ Integer.toString(bestScore) + " wpm");
         }
     }
 

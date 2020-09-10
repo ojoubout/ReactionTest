@@ -19,15 +19,18 @@ public class AimQuiz extends AppCompatActivity {
 
     private ImageView targetImage, background;
     private TextView bestScoreText, infoText, remainingText;
-    private Button backButton;
-    private boolean isPlaying = false;
+    private Button backButton, resetButton;
     private static final String TAG = "AimQuiz";
     private static final int TARGETS = 13;
     private int targetsLeft;
     private long tick = 0;
 
+    private final int IDLE = 0;
+    private final int PLAYING = 1;
+    private final int FINISHED = 2;
+
+    private int isPlaying = IDLE;
     private int bestScore;
-    SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,31 +41,32 @@ public class AimQuiz extends AppCompatActivity {
         bestScoreText = findViewById(R.id.bestScore);
         remainingText = findViewById(R.id.remaining);
         infoText = findViewById(R.id.infoText);
+        resetButton = findViewById(R.id.resetButton);
         backButton = findViewById(R.id.backButton);
         background = findViewById(R.id.background);
 
-        sharedPref = getPreferences(MODE_PRIVATE);
-        bestScore = General.getBestScore(sharedPref);
+        bestScore = General.getBestScore(this);
         refreshBestScore();
         background.setOnClickListener(view -> {
-            if (!isPlaying) {
-                changePlayingState(true);
+            if (isPlaying == IDLE) {
+                changePlayingState(PLAYING);
             }
         });
         targetImage.setOnClickListener(view -> {
-            if (isPlaying) {
+            if (isPlaying == PLAYING) {
                 if (--targetsLeft == 0) {
-                    changePlayingState(false);
+                    changePlayingState(FINISHED);
                     int diff = (int) (SystemClock.elapsedRealtime() - tick) / TARGETS;
-                    infoText.setText("AVG Time per target:\n " + diff + " ms\n" +
-                            "Tap to Start");
-                    bestScore = General.saveBestScore(sharedPref, diff, General.LOW);
+                    infoText.setText("AVG Time per target:\n " + diff + " ms");
+                    bestScore = General.saveBestScore(this, diff, General.LOW);
                     refreshBestScore();
                 } else {
                     targetChangePosition();
                 }
             }
         });
+
+        resetButton.setOnClickListener(view -> General.restart(this));
         backButton.setOnClickListener(view -> finish());
     }
 
@@ -74,16 +78,16 @@ public class AimQuiz extends AppCompatActivity {
         }
     }
 
-    private void changePlayingState(boolean state) {
+    private void changePlayingState(int state) {
         isPlaying = state;
-        if (state) {
+        if (state == PLAYING) {
             targetImage.setVisibility(View.VISIBLE);
             remainingText.setVisibility(View.VISIBLE);
             infoText.setVisibility(View.INVISIBLE);
             targetsLeft = TARGETS;
             tick = SystemClock.elapsedRealtime();
             targetChangePosition();
-        } else {
+        } else if (state == FINISHED){
             targetImage.setVisibility(View.INVISIBLE);
             remainingText.setVisibility(View.INVISIBLE);
             infoText.setVisibility(View.VISIBLE);

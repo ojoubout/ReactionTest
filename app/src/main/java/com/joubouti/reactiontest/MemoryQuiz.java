@@ -43,6 +43,9 @@ public class MemoryQuiz extends AppCompatActivity {
     private CountDownTimer timer;
     MemoryQuizAdapter adapter;
 
+    private int bestScore;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +63,8 @@ public class MemoryQuiz extends AppCompatActivity {
         adapter = new MemoryQuizAdapter(this, squares);
         gridView.setAdapter(adapter);
 
+        bestScore = General.getBestScore(this);
+        refreshBestScore();
 
         gridView.setOnItemClickListener((adapterView, view, i, l) -> {
             if (state == PLAY) {
@@ -78,6 +83,8 @@ public class MemoryQuiz extends AppCompatActivity {
                         gridView.setVisibility(View.INVISIBLE);
                         infoText.setVisibility(View.VISIBLE);
                         infoText.setText("Level: " + level);
+                        bestScore = General.saveBestScore(this, level, General.HIGH);
+                        refreshBestScore();
                         state = FINISH;
                     }
                 }
@@ -145,8 +152,14 @@ public class MemoryQuiz extends AppCompatActivity {
                 state = PLAY;
             }
         }.start();
-
-
-
     }
+
+    private void refreshBestScore() {
+        if (bestScore == -1) {
+            bestScoreText.setText("Your best: N/A");
+        } else {
+            bestScoreText.setText("Your best: "+ "Level " + Integer.toString(bestScore));
+        }
+    }
+
 }

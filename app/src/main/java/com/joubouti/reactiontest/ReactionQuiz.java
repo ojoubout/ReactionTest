@@ -16,7 +16,7 @@ import java.util.Random;
 
 public class ReactionQuiz extends AppCompatActivity {
 
-    private Button backButton;
+    private Button backButton, resetButton;
     private TextView bestScoreText, infoText;
     private ImageView clickScreen;
 
@@ -28,8 +28,6 @@ public class ReactionQuiz extends AppCompatActivity {
     private long tick = 0;
     private int bestScore;
 
-    SharedPreferences sharedPref;
-
 
     private int state;
     @Override
@@ -40,13 +38,13 @@ public class ReactionQuiz extends AppCompatActivity {
         bestScoreText = findViewById(R.id.bestScore);
         infoText = findViewById(R.id.infoText);
         backButton = findViewById(R.id.backButton);
+        resetButton = findViewById(R.id.resetButton);
 
-        sharedPref = getPreferences(Context.MODE_PRIVATE);
 
-        bestScore = General.getBestScore(sharedPref);
+        bestScore = General.getBestScore(this);
         refreshBestScore();
 
-
+        resetButton.setOnClickListener(view -> General.restart(this));
         backButton.setOnClickListener(view -> finish());
         clickScreen.setOnClickListener(view -> {
             if (state == IDLE) {
@@ -79,7 +77,7 @@ public class ReactionQuiz extends AppCompatActivity {
                 state = IDLE;
                 int diff = (int) (SystemClock.elapsedRealtime() - tick);
                 infoText.setText("Your best: " + diff + " ms");
-                bestScore = General.saveBestScore(sharedPref, diff, General.LOW);
+                bestScore = General.saveBestScore(this, diff, General.LOW);
                 refreshBestScore();
             }
         });

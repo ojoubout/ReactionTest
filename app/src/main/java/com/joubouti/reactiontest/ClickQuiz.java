@@ -3,6 +3,7 @@ package com.joubouti.reactiontest;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -25,7 +26,6 @@ public class ClickQuiz extends AppCompatActivity {
     private int state = IDLE;
     private int clicks;
     private int bestScore;
-    SharedPreferences sharedPref;
     private CountDownTimer timer;
 
     @Override
@@ -39,8 +39,7 @@ public class ClickQuiz extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
         resetButton = findViewById(R.id.resetButton);
 
-        sharedPref = getPreferences(MODE_PRIVATE);
-        bestScore = General.getBestScore(sharedPref);
+        bestScore = General.getBestScore(this);
         refreshBestScore();
         clickScreen.setOnClickListener(view -> {
             if (state == IDLE) {
@@ -54,7 +53,7 @@ public class ClickQuiz extends AppCompatActivity {
                     public void onFinish() {
                         clickScreen.setBackgroundColor(getResources().getColor(R.color.CLICK));
                         state = FINISH;
-                        bestScore = General.saveBestScore(sharedPref, clicks, General.HIGH);
+                        bestScore = General.saveBestScore(ClickQuiz.this, clicks, General.HIGH);
                         refreshBestScore();
                         infoText.setText(clicks + " clicks\n" + clicks / (TIME / 1000f) + " CPS");
                     }
@@ -66,12 +65,7 @@ public class ClickQuiz extends AppCompatActivity {
             }
         });
 
-        resetButton.setOnClickListener(view -> {
-            timer.cancel();
-            state = IDLE;
-            clickScreen.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            infoText.setText("Tap to Start");
-        });
+        resetButton.setOnClickListener(view -> General.restart(this));
         backButton.setOnClickListener(view -> finish());
     }
 
