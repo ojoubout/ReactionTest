@@ -89,7 +89,7 @@ public class TypingQuiz extends AppCompatActivity {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                float a = (s.length() / 5f) * 60, b = (SystemClock.elapsedRealtime() - tick) / 1000f;
+                float a = (s.length() / 5f), b = ((SystemClock.elapsedRealtime() - tick) / 1000f) / 60f;
                 int score = (int) (a / b);
 
                 if (!startTick) {
