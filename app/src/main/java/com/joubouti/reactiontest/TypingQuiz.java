@@ -90,21 +90,38 @@ public class TypingQuiz extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 float a = (s.length() / 5f), b = ((SystemClock.elapsedRealtime() - tick) / 1000f) / 60f;
-                int score = (int) (a / b);
+                int uncorrected_errors = 0;
 
                 if (!startTick) {
                     startTick = true;
                     tick = SystemClock.elapsedRealtime();
                 }
-                wpmText.setText(score  + " wpm");
                 sequence = new SpannableString(sequences[sequenceID]);
-                if (s.toString().equals(sequenceText.getText().toString())) {
+                for (int i = 0; i < sequenceText.length() && (i < s.length() || i < lastSize); i++) {
+                    if (i >= s.length()) {
+                        sequence.setSpan(bgcNone, i, i + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                    } else if (sequence.charAt(i) == s.charAt(i)) {
+                        sequence.setSpan(new BackgroundColorSpan(Color.GREEN), i, i + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                    } else {
+                        uncorrected_errors++;
+                        sequence.setSpan(new BackgroundColorSpan(Color.RED), i, i + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                    }
+                }
+
+//                Log.e(TAG, a + "|" + uncorrected_errors);
+
+                int score = (int) ((a - (uncorrected_errors / 5f)) / b);
+
+
+                wpmText.setText(score  + " wpm");
+
+                if (s.length() >= sequenceText.getText().length()) {
                     isPlaying = false;
                     sequenceText.setVisibility(View.INVISIBLE);
                     infoText.setVisibility(View.VISIBLE);
                     wpmText.setVisibility(View.INVISIBLE);
 
-                    Log.e(TAG, "YOU WIN: " + a + "|" + b + "|" + (SystemClock.elapsedRealtime() - tick));
+//                    Log.e(TAG, "YOU WIN: " + a + "|" + b + "|" + (SystemClock.elapsedRealtime() - tick));
 
                     infoText.setText(score  + " wpm");
 //                                editText.setText("");
@@ -116,16 +133,7 @@ public class TypingQuiz extends AppCompatActivity {
 
                     return;
                 }
-                for (int i = 0; i < sequenceText.length() && (i < s.length() || i < lastSize); i++) {
-                    Log.e(TAG, "" + i);
-                    if (i >= s.length()) {
-                        sequence.setSpan(bgcNone, i, i + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                    } else if (sequence.charAt(i) == s.charAt(i)) {
-                        sequence.setSpan(new BackgroundColorSpan(Color.GREEN), i, i + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                    } else {
-                        sequence.setSpan(new BackgroundColorSpan(Color.RED), i, i + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                    }
-                }
+
                 lastSize = s.length();
                 sequenceText.setText(sequence);
             }
